@@ -89,6 +89,8 @@ class KeyboardActions extends StatefulWidget {
   /// Override default height of the bar. `null` is dynamic height
   final double? barSize;
 
+  final ScrollController? scrollController;
+
   const KeyboardActions(
       {this.child,
       this.bottomAvoiderScrollPhysics,
@@ -102,7 +104,8 @@ class KeyboardActions extends StatefulWidget {
       this.overscroll = 12.0,
       this.disableScroll = false,
       this.keepFocusOnTappingNode = false,
-      this.barSize = _kBarSize})
+      this.barSize = _kBarSize,
+      this.scrollController})
       : assert(child != null);
 
   @override
@@ -610,6 +613,7 @@ class KeyboardActionstate extends State<KeyboardActions>
               key: _keyParent,
               child: BottomAreaAvoider(
                 key: bottomAreaAvoiderKey,
+                scrollController: widget.scrollController,
                 areaToAvoid: _offset,
                 overscroll: widget.overscroll,
                 duration: Duration(

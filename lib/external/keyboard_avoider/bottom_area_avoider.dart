@@ -42,6 +42,8 @@ class BottomAreaAvoider extends StatefulWidget {
   /// The [ScrollPhysics] of the [SingleChildScrollView] which contains child
   final ScrollPhysics? physics;
 
+  final ScrollController? scrollController;
+
   BottomAreaAvoider(
       {Key? key,
       required this.child,
@@ -50,7 +52,8 @@ class BottomAreaAvoider extends StatefulWidget {
       this.duration = defaultDuration,
       this.curve = defaultCurve,
       this.overscroll = defaultOverscroll,
-      this.physics})
+      this.physics,
+      this.scrollController})
       : //assert(child is ScrollView ? child.controller != null : true),
         assert(areaToAvoid >= 0, 'Cannot avoid a negative area'),
         super(key: key);
@@ -91,10 +94,11 @@ class BottomAreaAvoiderState extends State<BottomAreaAvoider> {
 
     // If [child] is a [ScrollView], get its [ScrollController]
     // and embed the [child] directly in an [AnimatedContainer].
-    if (widget.child is ScrollView) {
+    if (widget.scrollController != null || widget.child is ScrollView) {
       var scrollView = widget.child as ScrollView;
-      _scrollController =
-          scrollView.controller ?? PrimaryScrollController.of(context);
+      _scrollController = widget.scrollController ??
+          scrollView.controller ??
+          PrimaryScrollController.of(context);
       return _buildAnimatedContainer(widget.child);
     }
     // If [child] is not a [ScrollView], and [autoScroll] is true,
